@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="km">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VehicleRental DB - គ្រប់គ្រងការបញ្ចុះតម្លៃ</title>
+    <link rel="stylesheet" href="discounts.css">
+    <link rel="stylesheet" href="customers.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <header class="top-navbar">
+        <div class="logo-area">
+            <span class="logo-text">🛒 VehicleRental DB</span>
+        </div>
+        <div class="user-area">
+            <div class="user-avatar">U</div>
+            <button class="btn-logout">Logout</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <!-- ផ្នែក Dashboard -->
+                <a href="index.html" class="menu-item ">
+                    <i class="fa-solid fa-chart-simple"></i> Dashboard <!-- python -m uvicorn main:app --reload -->
+                </a>
+
+                <p class="menu-category">RENTALS & SALES</p>
+                <a href="customers.html" class="menu-item ">
+                    <i class="fa-solid fa-users"></i> Clients (Customers)
+                </a>
+                <a href="vehicles.html" class="menu-item">
+                    <i class="fa-solid fa-car"></i> Vehicles Fleet
+                </a>
+                <a href="orders.html" class="menu-item">
+                    <i class="fa-solid fa-calendar-days"></i> Rental Orders
+                </a>
+                <a href="invoices.html" class="menu-item">
+                    <i class="fa-solid fa-file-invoice"></i> Invoices (Views)
+                </a>
+
+                <p class="menu-category">OPERATIONS</p>
+                <a href="returns.html" class="menu-item">
+                    <i class="fa-solid fa-rotate-left"></i> Returns & Extra Charges
+                </a>
+                <a href="blacklist.html" class="menu-item">
+                    <i class="fa-solid fa-user-slash"></i> Blacklist Records
+                </a>
+                <a href="staff.html" class="menu-item">
+                    <i class="fa-solid fa-users-gear"></i> Staff & Logs
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <span>Service: <b style="color: #10b981;">ORCL DB</b></span>
+            </div>
+        </aside>
+
+        <main class="content-body">
+
+            <div class="content-header-top">
+                <div class="khmer-title-block">
+                    <h2><i class="fa-solid fa-ticket-simple khmer-gold-text"></i> កម្មវិធីប្រូម៉ូសិន និងបញ្ចុះតម្លៃ 🎁
+                    </h2>
+                    <p>គ្រប់គ្រងការផ្តល់ជូនពិសេស និងគូប៉ុងបញ្ចុះតម្លៃជូនអតិថិជន (Oracle DB - DISCOUNTS)</p>
+                </div>
+                <button class="btn-add" id="openModalBtn">
+                    <i class="fa-solid fa-plus-circle"></i> បង្កើតប្រូម៉ូសិនថ្មី
+                </button>
+            </div>
+
+            <div class="marquee-container">
+                <div class="marquee-text">
+                    🎉 <b>មហាសង្ក្រាន្តប្រូម៉ូសិន:</b> រាល់ការកក់រថយន្តចាប់ពី ៣ថ្ងៃឡើងទៅ
+                    នឹងទទួលបានការបញ្ចុះតម្លៃភ្លាមៗរហូតដល់ ២០%! រៀបចំទិន្នន័យដោយសុវត្ថិភាពលើ Oracle SQL។
+                </div>
+            </div>
+
+            <div class="metrics-grid"
+                style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-bottom: 20px; align-items: stretch;">
+
+                <div class="stat-card khmer-luxury-card animate-float" style="margin: 0;">
+                    <div class="stat-icon discount-icon-bg"><i class="fa-solid fa-percentage"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-label">ប្រូម៉ូសិនកំពុងដើរ</span>
+                        <h3 id="active-discounts-count">-- កម្មវិធី</h3>
+                    </div>
+                </div>
+
+                <div class="stat-card khmer-luxury-card"
+                    style="margin: 0; display: flex; flex-direction: column; justify-content: center; padding: 15px 20px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <span class="stat-label"
+                        style="display: block; margin-bottom: 8px; font-weight: bold; color: #4b5563;"><i
+                            class="fa-solid fa-magnifying-glass"></i> ស្វែងរក និងចម្រោះទិន្នន័យ</span>
+
+                    <div style="display: flex; gap: 10px; width: 100%;">
+                        <div style="position: relative; flex: 2;">
+                            <input type="text" id="searchPromoInput" placeholder="ស្វែងរកតាមឈ្មោះកម្មវិធី..."
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-family: 'Kantumruy Pro', sans-serif; box-sizing: border-box;">
+                        </div>
+
+                        <select id="filterTypeSelect"
+                            style="flex: 1; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-family: 'Kantumruy Pro', sans-serif; background: white; cursor: pointer;">
+                            <option value="All">ទាំងអស់ (Types)</option>
+                            <option value="Percentage">ភាគរយ (%)</option>
+                            <option value="Fixed Amount">ទឹកប្រាក់ ($)</option>
+                        </select>
+
+                        <select id="filterStatusSelect"
+                            style="flex: 1; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-family: 'Kantumruy Pro', sans-serif; background: white; cursor: pointer;">
+                            <option value="All">ទាំងអស់ (Status)</option>
+                            <option value="Active">🟢 កំពុងដើរ</option>
+                            <option value="Expired">🔴 ផុតកំណត់</option>
+                        </select>
+
+                        <button id="btnSearchPromo" onclick="filterDiscountsData()"
+                            style="background: #881337; color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-family: 'Kantumruy Pro', sans-serif; display: flex; align-items: center; gap: 6px; font-weight: bold;">
+                            <i class="fa-solid fa-magnifying-glass"></i> ស្វែងរក
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="table-card khmer-border-top">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ឈ្មោះកម្មវិធីបញ្ចុះតម្លៃ</th>
+                            <th>ប្រភេទ</th>
+                            <th>តម្លៃបញ្ចុះ</th>
+                            <th>ថ្ងៃចាប់ផ្តើម</th>
+                            <th>ថ្ងៃបញ្ចប់</th>
+                            <th>ស្ថានភាព</th>
+                            <th>សកម្មភាព</th>
+                        </tr>
+                    </thead>
+                    <tbody id="discounts-table-body">
+                        <tr>
+                            <td colspan="8" class="text-center">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i> កំពុងទាញទិន្នន័យប្រូម៉ូសិន...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div id="discountModal"
+        style="display: none; position: fixed; z-index: 999; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
+        <div
+            style="background: white; padding: 25px; border-radius: 12px; width: 450px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; font-family: 'Kantumruy Pro', sans-serif;">
+
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #fecdd3; padding-bottom: 10px; margin-bottom: 20px;">
+                <h3 id="modalTitle" style="margin: 0; color: #881337;">🎁 បង្កើតកម្មវិធីប្រូម៉ូសិនថ្មី</h3>
+                <span id="closeModalBtn"
+                    style="font-size: 24px; cursor: pointer; color: #9ca3af; font-weight: bold;">&times;</span>
+            </div>
+
+            <form id="discountForm">
+                <input type="hidden" id="discountIdHidden">
+
+                <div style="margin-bottom: 15px;">
+                    <label
+                        style="display: block; margin-bottom: 5px; font-weight: bold; color: #4b5563;">ឈ្មោះកម្មវិធីប្រូម៉ូសិន៖</label>
+                    <input type="text" id="discountName" required
+                        style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box;">
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label
+                        style="display: block; margin-bottom: 5px; font-weight: bold; color: #4b5563;">ប្រភេទបញ្ចុះតម្លៃ
+                        (Discount Type)៖</label>
+                    <select id="discountType" required
+                        style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; background: white;">
+                        <option value="Percentage">ភាគរយ (%)</option>
+                        <option value="Fixed Amount">ទឹកប្រាក់ ($)</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #4b5563;">តម្លៃបញ្ចុះ
+                        (ឧ. 10 សម្រាប់ 10% ឬ 5 សម្រាប់ $5)៖</label>
+                    <input type="number" step="any" id="discountValue" required
+                        style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box;">
+                </div>
+
+                <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label
+                            style="display: block; margin-bottom: 5px; font-weight: bold; color: #4b5563;">ថ្ងៃចាប់ផ្តើម៖</label>
+                        <input type="date" id="startDate" required
+                            style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label
+                            style="display: block; margin-bottom: 5px; font-weight: bold; color: #4b5563;">ថ្ងៃបញ្ចប់៖</label>
+                        <input type="date" id="endDate" required
+                            style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box;">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label
+                        style="display: block; margin-bottom: 5px; font-weight: bold; color: #4b5563;">ស្ថានភាព៖</label>
+                    <select id="discountStatus" required
+                        style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; background: white;">
+                        <option value="Active">🟢 Active (បើកប្រើ)</option>
+                        <option value="Expired">🔴 Expired (បិទ/ផុតកំណត់)</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label
+                        style="display: block; margin-bottom: 5px; font-weight: bold; color: #4b5563;">រូបភាពប្រូម៉ូសិន៖</label>
+                    <input type="file" accept="image/*" onchange="previewAndConvertImage(event)"
+                        style="margin-bottom: 10px;">
+                    <div style="text-align: center;">
+                        <img id="imagePreview" src="https://placehold.co/600x400/881337/ffffff?text=ឡូហ្គោប្រូម៉ូសិន"
+                            style="max-width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid #fecdd3;">
+                    </div>
+                </div>
+
+                <div
+                    style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #e5e7eb; padding-top: 15px;">
+                    <button type="button" onclick="document.getElementById('discountModal').style.display='none'"
+                        style="background: #9ca3af; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">បោះបង់</button>
+                    <button type="submit" id="submitBtn"
+                        style="background: #881337; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">រក្សាទុកទិន្នន័យ</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <script src="discounts.js"></script>
+</body>
+
+</html>

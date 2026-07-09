@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="km">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>វិក្កយបត្រ | Cambodia Car Rental Service</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --navy: #1e3a5f;
+            --navy-dark: #16304f;
+            --red: #dc2626;
+            --border: #16304f;
+            --bg-page: #eef1f5;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kantumruy Pro', 'Segoe UI', sans-serif;
+            background: var(--bg-page);
+            margin: 0;
+            padding: 30px 16px;
+            color: #1f2937;
+        }
+
+        /* --- របារឧបករណ៍ (មិនបង្ហាញពេលបោះពុម្ព) --- */
+        .toolbar {
+            max-width: 800px;
+            margin: 0 auto 16px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toolbar .id-input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+
+        .toolbar input {
+            border: none;
+            outline: none;
+            width: 80px;
+            font-size: 14px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 9px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-load {
+            background: var(--navy);
+            color: white;
+        }
+
+        .btn-load:hover {
+            background: var(--navy-dark);
+        }
+
+        .btn-print {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-print:hover {
+            background: #1d4ed8;
+        }
+
+        /* --- សន្លឹក Invoice --- */
+        .invoice-sheet {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 36px 44px 40px 44px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .invoice-header .logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .invoice-header .logo-icon {
+            font-size: 26px;
+            color: var(--navy);
+        }
+
+        .invoice-header .logo-caption {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: 1px;
+            margin-top: -2px;
+        }
+
+        .invoice-title {
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: 2px;
+            margin: 8px 0 4px 0;
+        }
+
+        .company-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--red);
+            margin: 2px 0;
+        }
+
+        .company-line {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--navy);
+            margin: 2px 0;
+        }
+
+        .double-rule {
+            border: none;
+            border-top: 3px solid var(--navy);
+            border-bottom: 1px solid var(--navy);
+            height: 4px;
+            margin: 14px 0 16px 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 24px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #dbe2ea;
+            padding-bottom: 14px;
+        }
+
+        .info-grid .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 3px 0;
+        }
+
+        .info-grid .label {
+            font-weight: 700;
+            color: #1f2937;
+            white-space: nowrap;
+        }
+
+        .info-grid .value {
+            text-align: right;
+            color: #1f2937;
+        }
+
+        .info-grid .value.strong {
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .section-bar {
+            background: var(--navy);
+            color: white;
+            text-align: center;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 1px;
+            padding: 7px 0;
+            margin: 18px 0 14px 0;
+        }
+
+        .financial-grid .value.money {
+            font-weight: 700;
+            color: var(--red);
+        }
+
+        .signature-block {
+            margin-top: 26px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .date-line {
+            font-size: 13px;
+        }
+
+        .date-line .label {
+            font-weight: 700;
+        }
+
+        .stamp {
+            width: 130px;
+            height: 130px;
+            border: 3px solid var(--red);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--red);
+            text-align: center;
+            transform: rotate(-8deg);
+            opacity: 0.9;
+        }
+
+        .stamp .stamp-title {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .stamp .stamp-sub {
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .stamp .stamp-bottom {
+            font-size: 7px;
+            font-weight: 600;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .staff-name-row {
+            margin-top: 18px;
+            font-size: 13px;
+        }
+
+        .staff-name-row .label {
+            font-weight: 700;
+        }
+
+        .staff-name-row .value {
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .loading-msg,
+        .error-msg {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .error-msg {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        /* --- Print Mode --- */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .toolbar {
+                display: none;
+            }
+
+            .invoice-sheet {
+                box-shadow: none;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="toolbar">
+        <div class="id-input">
+            <i class="fa-solid fa-hashtag" style="color:#94a3b8;"></i>
+            <input type="number" id="invoiceIdInput" placeholder="INVOICE_ID">
+        </div>
+        <div style="display:flex; gap:10px;">
+            <button class="btn btn-load" id="btnLoad"><i class="fa-solid fa-magnifying-glass"></i>
+                មើលវិក្កយបត្រ</button>
+            <button class="btn btn-print" id="btnPrint"><i class="fa-solid fa-print"></i> បោះពុម្ព</button>
+        </div>
+    </div>
+
+    <div class="invoice-sheet" id="invoiceSheet">
+        <div class="loading-msg">សូមបញ្ចូល Invoice ID ហើយចុច "មើលវិក្កយបត្រ"</div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000/api/invoices';
+
+        document.getElementById('btnLoad').addEventListener('click', loadInvoice);
+        document.getElementById('invoiceIdInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') loadInvoice();
+        });
+        document.getElementById('btnPrint').addEventListener('click', () => window.print());
+
+        // អាចហៅដោយស្វ័យប្រវត្តិតាម URL: invoice.html?id=6
+        const params = new URLSearchParams(window.location.search);
+        const initialId = params.get('id');
+        if (initialId) {
+            document.getElementById('invoiceIdInput').value = initialId;
+            loadInvoice();
+        }
+
+        async function loadInvoice() {
+            const id = document.getElementById('invoiceIdInput').value.trim();
+            const sheet = document.getElementById('invoiceSheet');
+            if (!id) {
+                sheet.innerHTML = '<div class="error-msg">សូមបញ្ចូល Invoice ID សិន</div>';
+                return;
+            }
+
+            sheet.innerHTML = '<div class="loading-msg"><i class="fa-solid fa-spinner fa-spin"></i> កំពុងទាញយកទិន្នន័យ...</div>';
+
+            try {
+                const res = await fetch(`${API_URL}/${id}`);
+                if (!res.ok) {
+                    if (res.status === 404) {
+                        sheet.innerHTML = '<div class="error-msg">រកមិនឃើញ Invoice នេះទេ</div>';
+                    } else {
+                        sheet.innerHTML = '<div class="error-msg">មានបញ្ហាក្នុងការទាញយកទិន្នន័យ</div>';
+                    }
+                    return;
+                }
+                const inv = await res.json();
+                renderInvoice(inv);
+            } catch (err) {
+                sheet.innerHTML = '<div class="error-msg">មិនអាចតភ្ជាប់ទៅកាន់ម៉ាស៊ីនបម្រើបានទេ</div>';
+            }
+        }
+
+        function money(n) {
+            return `$${Number(n).toFixed(2)}`;
+        }
+
+        function renderInvoice(inv) {
+            const sheet = document.getElementById('invoiceSheet');
+
+            const discountLabel = inv.DISCOUNT_TYPE && inv.DISCOUNT_TYPE.toLowerCase() === 'percent'
+                ? `${Number(inv.DISCOUNT_VALUE).toFixed(2)}%`
+                : money(inv.DISCOUNT_VALUE);
+
+            sheet.innerHTML = `
+        <div class="invoice-header">
+            <div class="logo-row">
+                <i class="fa-solid fa-car logo-icon"></i>
+            </div>
+            <div class="logo-caption">CAR RENTAL</div>
+            <div class="invoice-title">INVOICE</div>
+            <div class="company-name">CAMBODIA CAR RENTAL SERVICE</div>
+            <div class="company-line">ADDRESS : PHNOM PENH , CAMBODIA</div>
+            <div class="company-line">PHONE : 015448174 / 0712261587</div>
+        </div>
+
+        <hr class="double-rule">
+
+        <div class="info-grid">
+            <div class="row"><span class="label">INVOICE_ID</span><span class="value strong">${inv.INVOICE_ID}</span></div>
+            <div class="row"><span class="label">INVOICE_DATE</span><span class="value strong">${inv.INVOICE_DATE}</span></div>
+            <div class="row"><span class="label">CUSTOMER NAME :</span><span class="value strong">${inv.CUSTOMER_NAME}</span></div>
+            <div class="row"><span class="label">PHONE</span><span class="value strong">${inv.CUSTOMER_PHONE}</span></div>
+            <div class="row" style="grid-column: 1 / -1;"><span class="label">ADDRESS&nbsp;&nbsp;&nbsp;:</span><span class="value" style="flex:1;">${inv.CUSTOMER_ADDRESS}</span></div>
+        </div>
+
+        <div class="section-bar">RENTAL DETAILS</div>
+        <div class="info-grid" style="border-bottom:none;">
+            <div class="row"><span class="label">BRAND_MODEL</span><span class="value strong">${inv.BRAND_MODEL}</span></div>
+            <div class="row"><span class="label">PLATE_NO</span><span class="value strong">${inv.PLATE_NO}</span></div>
+            <div class="row"><span class="label">RENTAL_DATE</span><span class="value strong">${inv.RENTAL_DATE}</span></div>
+            <div class="row"><span class="label">RETURN_PLAN</span><span class="value strong">${inv.RETURN_PLAN}</span></div>
+            <div class="row"><span class="label">DAILY_RATE</span><span class="value strong">${money(inv.DAILY_RATE)}</span></div>
+            <div class="row"><span class="label">TOTAL_DAYS</span><span class="value strong">${inv.TOTAL_DAYS}</span></div>
+            <div class="row"><span class="label">START_ODOMETER</span><span class="value strong">${inv.START_ODOMETER}</span></div>
+        </div>
+
+        <div class="section-bar">FINANCIAL SUMMARY</div>
+        <div class="info-grid financial-grid" style="border-bottom:none;">
+            <div class="row"><span class="label">DISCOUNT_NAME</span><span class="value strong">${inv.DISCOUNT_NAME || '-'}</span></div>
+            <div class="row"><span class="label">DISCOUNT_VALUE</span><span class="value strong">${discountLabel}</span></div>
+            <div class="row"><span class="label">DISCOUNT_TYPE</span><span class="value strong">${inv.DISCOUNT_TYPE || '-'}</span></div>
+            <div class="row"><span class="label">DEPOSIT_AMOUNT</span><span class="value money">${money(inv.DEPOSIT_AMOUNT)}</span></div>
+            <div class="row"><span class="label"></span><span class="value"></span></div>
+            <div class="row"><span class="label">DISCOUNT</span><span class="value money">${money(inv.DISCOUNT_AMOUNT)}</span></div>
+            <div class="row"><span class="label"></span><span class="value"></span></div>
+            <div class="row"><span class="label">TOTAL DUE</span><span class="value money" style="font-size:15px;">${money(inv.TOTAL_DUE)}</span></div>
+        </div>
+
+        <div class="signature-block">
+            <div class="date-line">
+                <span class="label">Date:</span>&nbsp;&nbsp;${formatLongDate(inv.INVOICE_DATE)}
+            </div>
+            <div class="stamp">
+                <div class="stamp-title">VY &amp; VIBOL</div>
+                <div class="stamp-sub">CAR RENTAL</div>
+                <div class="stamp-bottom">KINGDOM OF CAMBODIA</div>
+            </div>
+        </div>
+
+        <div class="staff-name-row">
+            <span class="label">STAFF NAME :</span>&nbsp;&nbsp;<span class="value">${inv.STAFF_NAME}</span>
+        </div>
+    `;
+        }
+
+        function formatLongDate(mmddyyyy) {
+            // ប្តូរពី MM/DD/YYYY ទៅជា "Friday, May 29, 2026"
+            const parts = mmddyyyy.split('/');
+            if (parts.length !== 3) return mmddyyyy;
+            const d = new Date(parts[2], parts[0] - 1, parts[1]);
+            return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+    </script>
+</body>
+
+</html>

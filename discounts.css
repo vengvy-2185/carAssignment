@@ -1,0 +1,160 @@
+body {
+    font-family: 'Kantumruy Pro', 'Segoe UI', sans-serif;
+    background-color: #fcf8f8;
+    /* ពណ៌ផ្កាឈូក/សស្រាល */
+    margin: 0;
+    padding: 0;
+}
+
+/* ==================== ពណ៌ក្បាលលើបែប Khmer Deep Red & Gold ==================== */
+.top-navbar {
+    background: linear-gradient(135deg, #58051a, #881337);
+    /* ពណ៌ឈាមជ្រូកខ្មែរប្រណីត */
+    color: #ffffff;
+    height: 60px;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(136, 19, 55, 0.2);
+}
+
+.khmer-gold-text {
+    color: #eab308;
+    /* ពណ៌ទឹកមាសភ្លឺ */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar Dark Theme */
+.sidebar {
+    width: 250px;
+    background-color: #111827;
+    color: #9ca3af;
+}
+
+.menu-item.active {
+    background: linear-gradient(135deg, #881337, #b91c1c);
+    /* Active ពណ៌ឈាមជ្រូក */
+    color: white;
+    box-shadow: 0 4px 12px rgba(136, 19, 55, 0.3);
+}
+
+/* ប៊ូតុងបង្កើតថ្មីមានពន្លឺជះ (Glow Effect) */
+.btn-add {
+    background: linear-gradient(135deg, #eab308, #ca8a04);
+    /* ពណ៌មាស */
+    color: #78350f;
+    border: none;
+    padding: 11px 22px;
+    border-radius: 30px;
+    /* មូលទាន់សម័យ */
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 0 15px rgba(234, 179, 8, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-add:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(234, 179, 8, 0.7);
+}
+
+/* --- អក្សររត់បែប Soft Khmer Blue --- */
+.marquee-container {
+    background: #fff7ed;
+    color: #c2410c;
+    padding: 10px 0;
+    overflow: hidden;
+    border-radius: 8px;
+    border-left: 5px solid #eab308;
+    margin-bottom: 25px;
+}
+
+.marquee-text {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee-centered 25s linear infinite;
+    padding-left: 100%;
+}
+
+@keyframes marquee-centered {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+/* ==================== ANIMATIONS & CARDS (ចលនាអណ្តែត) ==================== */
+.animate-float {
+    animation: floating 3.5s ease-in-out infinite;
+}
+
+.delay-1 {
+    animation-delay: 0.5s;
+}
+
+@keyframes floating {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.khmer-luxury-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #fecdd3;
+    border-bottom: 4px solid #881337;
+    /* បាតពណ៌ឈាមជ្រូក */
+    transition: all 0.3s ease;
+}
+
+.khmer-luxury-card:hover {
+    box-shadow: 0 10px 20px rgba(136, 19, 55, 0.1);
+}
+
+.discount-icon-bg {
+    background: #ffe4e6;
+    color: #9f1239;
+}
+
+.gift-icon-bg {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+/* Table Section */
+.khmer-border-top {
+    border-top: 4px solid #881337;
+    border-radius: 12px;
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-expired {
+    background: #fee2e2;
+    color: #991b1b;
+}

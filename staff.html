@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="km">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>គ្រប់គ្រងបុគ្គលិក - Staff Management</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts សម្រាប់អក្សរខ្មែរស្អាត -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- ភ្ជាប់ទៅកាន់ហ្វាល់ CSS ខាងក្រៅ -->
+    <link rel="stylesheet" href="staff.css">
+</head>
+
+<body>
+
+    <!-- របារខាងលើ (Top Navbar) -->
+    <header class="top-navbar">
+        <div class="logo-area">
+            <span class="logo-text">🛒 VehicleRental DB</span>
+        </div>
+        <div class="user-area">
+            <div class="user-avatar">U</div>
+            <button class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </div>
+    </header>
+
+    <!-- តួសេចក្តីរួម (Main Container) -->
+    <div class="main-container">
+
+        <!-- ដងចំហៀងព័ត៌មាន (Sidebar) -->
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <a href="index.html" class="menu-item">
+                    <i class="fa-solid fa-chart-simple"></i> Dashboard
+                </a>
+
+                <p class="menu-category">RENTALS & SALES</p>
+                <a href="customers.html" class="menu-item">
+                    <i class="fa-solid fa-users"></i> Clients (Customers)
+                </a>
+                <a href="vehicles.html" class="menu-item">
+                    <i class="fa-solid fa-car"></i> Vehicles Fleet
+                </a>
+                <a href="orders.html" class="menu-item">
+                    <i class="fa-solid fa-calendar-days"></i> Rental Orders
+                </a>
+                <a href="invoices.html" class="menu-item">
+                    <i class="fa-solid fa-file-invoice"></i> Invoices (Views)
+                </a>
+
+                <p class="menu-category">OPERATIONS</p>
+                <a href="returns.html" class="menu-item">
+                    <i class="fa-solid fa-rotate-left"></i> Returns & Extra Charges
+                </a>
+                <a href="blacklist.html" class="menu-item">
+                    <i class="fa-solid fa-user-slash"></i> Blacklist Records
+                </a>
+                <a href="staff.html" class="menu-item active">
+                    <i class="fa-solid fa-users-gear"></i> Staff & Logs
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <span>Service: <b style="color: #10b981;">ORCL DB</b></span>
+            </div>
+        </aside>
+
+        <!-- តំបន់ធ្វើការងារ (Workspace) -->
+        <main class="workspace">
+            <!-- បំណែកបង្ហាញ Top 5 ប្រាក់ខែខ្ពស់ជាងគេ -->
+            <h3 class="section-title"><i class="fa-solid fa-trophy text-warning"></i>
+                បុគ្គលិកឆ្នើមដែលមានប្រាក់ខែខ្ពស់ជាងគេ Top 5</h3>
+            <div class="top-salary-container" id="topSalariesList">
+                <!-- ទិន្នន័យ Top 5 នឹងត្រូវបង្កើតដោយ JavaScript -->
+            </div>
+
+            <!-- របារស្វែងរក និង ប៊ូតុងបន្ថែម -->
+            <div class="action-bar">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="staffSearch" placeholder="ស្វែងរកឈ្មោះ គណនី ឬលេខទូរស័ព្ទបុគ្គលិក...">
+                </div>
+                <button class="btn" id="btnOpenCreateModal"><i class="fa-solid fa-plus"></i> បន្ថែមបុគ្គលិកថ្មី</button>
+            </div>
+
+            <!-- តារាងបង្ហាញបញ្ជីបុគ្គលិក -->
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>រូបថត</th>
+                            <th>ID</th>
+                            <th>ឈ្មោះពេញ</th>
+                            <th>គណនី</th>
+                            <th>លេខទូរស័ព្ទ</th>
+                            <th>តួនាទី</th>
+                            <th>ប្រាក់ខែ</th>
+                            <th>ស្ថានភាព</th>
+                            <th>សកម្មភាព</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staffTableBody">
+                        <!-- ទិន្នន័យបុគ្គលិកដកស្រង់ចេញពី API -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal សម្រាប់ បញ្ចូល/កែប្រែ ទិន្នន័យបុគ្គលិក -->
+    <div class="modal" id="staffFormModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="formModalTitle">បញ្ចូលបុគ្គលិកថ្មី</h3>
+                <span class="close-btn" id="btnCloseFormModal">&times;</span>
+            </div>
+            <form id="staffForm">
+                <input type="hidden" id="formStaffId">
+                <div class="form-group">
+                    <label>ឈ្មោះពេញ *</label>
+                    <input type="text" id="formFullName" required>
+                </div>
+                <div class="form-group">
+                    <label>ឈ្មោះគណនី (Username) *</label>
+                    <input type="text" id="formUsername" required>
+                </div>
+                <div class="form-group" id="passwordGroup">
+                    <label>លេខកូដសម្ងាត់ *</label>
+                    <input type="password" id="formPassword">
+                </div>
+                <div class="form-group">
+                    <label>លេខទូរស័ព្ទ *</label>
+                    <input type="text" id="formPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>តួនាទី *</label>
+                    <select id="formRole">
+                        <option value="Manager">Manager</option>
+                        <option value="Cashier">Cashier</option>
+                        <option value="Receptionist">Receptionist</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>ប្រាក់ខែ ($) *</label>
+                    <input type="number" id="formSalary" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>ស្ថានភាព *</label>
+                    <select id="formStatus">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>រូបថតបុគ្គលិក</label>
+                    <input type="file" id="fileInput" accept="image/*">
+                    <input type="hidden" id="formPhotoBase64">
+                    <img id="formImgPreview" class="preview-avatar" alt="Preview">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="btnCancelForm">បោះបង់</button>
+                    <button type="submit" class="btn">រក្សាទុក</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal សម្រាប់ មើលប្រវត្តិការងារ និងប្រវត្តិជួលឡាន -->
+    <div class="modal" id="staffDetailModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3 id="detailTitle">ប្រវត្តិការងារ</h3>
+                <span class="close-btn" id="btnCloseDetailModal">&times;</span>
+            </div>
+
+            <h4 class="sub-modal-title text-purple"><i class="fa-solid fa-clock-rotate-left"></i>
+                ប្រវត្តិផ្លាស់ប្ដូរតួនាទី និងប្រាក់ខែ</h4>
+            <div class="table-responsive">
+                <table class="table-bordered">
+                    <thead>
+                        <tr>
+                            <th>តួនាទីចាស់</th>
+                            <th>តួនាទីថ្មី</th>
+                            <th>ប្រាក់ខែចាស់</th>
+                            <th>ប្រាក់ខែថ្មី</th>
+                            <th>កាលបរិច្ឆេទកែប្រែ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody"></tbody>
+                </table>
+            </div>
+
+            <h4 class="sub-modal-title text-cyan"><i class="fa-solid fa-car"></i> ប្រវត្តិជួលរថយន្តជូនអតិថិជន</h4>
+            <div class="table-responsive">
+                <table class="table-bordered">
+                    <thead>
+                        <tr>
+                            <th>លេខកូដជួល</th>
+                            <th>ម៉ាករថយន្ត</th>
+                            <th>ស្លាកលេខ</th>
+                            <th>ឈ្មោះអតិថិជន</th>
+                            <th>កាលបរិច្ឆេទជួល</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rentalTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ភ្ជាប់ទៅកាន់ហ្វាល់ JavaScript ខាងក្រៅ -->
+    <script src="staff.js"></script>
+</body>
+
+</html>

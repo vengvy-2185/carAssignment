@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="km">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VehicleRental DB - គ្រប់គ្រងការជួលរថយន្ត</title>
+    <link rel="stylesheet" href="orders.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <header class="top-navbar">
+        <div class="logo-area">
+            <span class="logo-text">🛒 VehicleRental DB</span>
+        </div>
+        <div class="user-area">
+            <div class="user-avatar">U</div>
+            <button class="btn-logout">Logout</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <!-- ផ្នែក Dashboard -->
+                <a href="index.html" class="menu-item ">
+                    <i class="fa-solid fa-chart-simple"></i> Dashboard <!-- python -m uvicorn main:app --reload -->
+                </a>
+
+                <p class="menu-category">RENTALS & SALES</p>
+                <a href="customers.html" class="menu-item ">
+                    <i class="fa-solid fa-users"></i> Clients (Customers)
+                </a>
+                <a href="vehicles.html" class="menu-item">
+                    <i class="fa-solid fa-car"></i> Vehicles Fleet
+                </a>
+                <a href="orders.html" class="menu-item">
+                    <i class="fa-solid fa-calendar-days"></i> Rental Orders
+                </a>
+                <a href="invoices.html" class="menu-item">
+                    <i class="fa-solid fa-file-invoice"></i> Invoices (Views)
+                </a>
+
+                <p class="menu-category">OPERATIONS</p>
+                <a href="returns.html" class="menu-item">
+                    <i class="fa-solid fa-rotate-left"></i> Returns & Extra Charges
+                </a>
+                <a href="blacklist.html" class="menu-item">
+                    <i class="fa-solid fa-user-slash"></i> Blacklist Records
+                </a>
+                <a href="staff.html" class="menu-item">
+                    <i class="fa-solid fa-users-gear"></i> Staff & Logs
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <span>Service: <b style="color: #10b981;">ORCL DB</b></span>
+            </div>
+        </aside>
+
+
+        <main class="content-body">
+            <div class="content-header-top">
+                <div class="khmer-title-block">
+                    <h2>🔑 ការបញ្ជាជួលរថយន្ត (Rental Orders) 🔑</h2>
+                    <p>គ្រប់គ្រងព័ត៌មានកក់ ថ្ងៃជួល ថ្ងៃប្រគល់ និងប្រាក់កក់របស់អតិថិជន (Oracle DB - RENTALS)</p>
+                </div>
+                <button class="btn-add" id="openRentalModalBtn">
+                    <i class="fa-solid fa-plus-circle"></i> បង្កើតការជួលថ្មី
+                </button>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="stat-card">
+                    <div class="stat-icon icon-active"><i class="fa-solid fa-car-tunnel"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-label">កិច្ចសន្យា (Active)</span>
+                        <h3 id="active-rentals-count">-- គ្រឿង</h3>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon icon-deposit"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-label">ប្រាក់កក់សរុប</span>
+                        <h3 id="total-deposit-amount">$0.00</h3>
+                    </div>
+                </div>
+
+                <div class="search-card">
+                    <span class="stat-label"><i class="fa-solid fa-magnifying-glass"></i> ស្វែងរកការជួលរថយន្ត</span>
+                    <div class="search-group">
+                        <input type="text" id="searchRentalInput" placeholder="ស្វែងរកតាមឈ្មោះអតិថិជន ឬរថយន្ត...">
+                        <select id="filterRentalStatus">
+                            <option value="All">ស្ថានភាពទាំងអស់</option>
+                            <option value="Active">🟢 កំពុងជួល</option>
+                            <option value="Returned">🔵 បានប្រគល់ឡាន</option>
+                            <option value="Pending">🟡 កក់ទុកមុន</option>
+                        </select>
+                        <button onclick="filterRentalsData()" class="btn-search-trigger">ស្វែងរក</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rental ID</th>
+                            <th>អតិថិជន</th>
+                            <th>រថយន្ត</th>
+                            <th>ថ្ងៃជួលចាប់ផ្តើម</th>
+                            <th>ថ្ងៃគម្រោងប្រគល់</th>
+                            <th>លេខកុងទ័រ (Odometer)</th>
+                            <th>ប្រាក់កក់</th>
+                            <th>ប្រូម៉ូសិន (Discount)</th>
+                            <th>ស្ថានភាព</th>
+                            <th>សកម្មភាព</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rentals-table-body">
+                        <tr>
+                            <td colspan="10" class="text-center">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i> កំពុងទាញទិន្នន័យពី Oracle Database...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div id="rentalModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="rentalModalTitle">🔑 បង្កើតកិច្ចសន្យាជួលរថយន្តថ្មី</h3>
+                <span id="closeRentalModalBtn" class="close-x">&times;</span>
+            </div>
+            <form id="rentalForm">
+                <input type="hidden" id="rentalIdHidden">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ជ្រើសរើសអតិថិជន៖</label>
+                        <select id="customerId" required>
+                            <option value="">-- ជ្រើសរើសអតិថិជន --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>ជ្រើសរើសរថយន្ត (បង្ហាញតែឡានទំនេរ)៖</label>
+                        <select id="vehicleId" required>
+                            <option value="">-- ជ្រើសរើសរថយន្ត --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ថ្ងៃជួលចាប់ផ្តើម៖</label>
+                        <input type="date" id="rentalDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>ថ្ងៃគម្រោងប្រគល់៖</label>
+                        <input type="date" id="returnPlan" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>លេខកុងទ័រចាប់ផ្តើម (Odometer)៖</label>
+                        <input type="number" id="startOdometer" required>
+                    </div>
+                    <div class="form-group">
+                        <label>ប្រាក់កក់ ($)៖</label>
+                        <input type="number" step="any" id="depositAmount" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>កម្មវិធីប្រូម៉ូសិន (Discount)៖</label>
+                        <select id="discountId">
+                            <option value="">-- គ្មានប្រូម៉ូសិន --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>ស្ថានភាពជួល៖</label>
+                        <select id="rentalStatus" required>
+                            <option value="Active">🟢 Active (កំពុងជួល)</option>
+                            <option value="Returned">🔵 Returned (បានប្រគល់)</option>
+                            <option value="Pending">🟡 Pending (កក់ទុក)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" onclick="document.getElementById('rentalModal').style.display='none'"
+                        class="btn-cancel">បោះបង់</button>
+                    <button type="submit" id="rentalSubmitBtn" class="btn-save">រក្សាទុកកិច្ចសន្យា</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="orders.js"></script>
+</body>
+
+</html>

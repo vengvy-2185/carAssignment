@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VehicleRental DB - Vehicles Fleet</title>
+    <link rel="stylesheet" href="vehicles.css">
+    <link rel="stylesheet" href="customers.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <header class="top-navbar">
+        <div class="logo-area">
+            <span class="logo-text">🛒 VehicleRental DB</span>
+        </div>
+        <div class="user-area">
+            <div class="user-avatar">U</div>
+            <button class="btn-logout">Logout</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <!-- ផ្នែក Dashboard -->
+                <a href="index.html" class="menu-item ">
+                    <i class="fa-solid fa-chart-simple"></i> Dashboard <!-- python -m uvicorn main:app --reload -->
+                </a>
+
+                <p class="menu-category">RENTALS & SALES</p>
+                <a href="customers.html" class="menu-item ">
+                    <i class="fa-solid fa-users"></i> Clients (Customers)
+                </a>
+                <a href="vehicles.html" class="menu-item active">
+                    <i class="fa-solid fa-car"></i> Vehicles Fleet
+                </a>
+                <a href="orders.html" class="menu-item">
+                    <i class="fa-solid fa-calendar-days"></i> Rental Orders
+                </a>
+                <a href="invoices.html" class="menu-item">
+                    <i class="fa-solid fa-file-invoice"></i> Invoices (Views)
+                </a>
+
+                <p class="menu-category">OPERATIONS</p>
+                <a href="returns.html" class="menu-item">
+                    <i class="fa-solid fa-rotate-left"></i> Returns & Extra Charges
+                </a>
+                <a href="blacklist.html" class="menu-item">
+                    <i class="fa-solid fa-user-slash"></i> Blacklist Records
+                </a>
+                <a href="staff.html" class="menu-item">
+                    <i class="fa-solid fa-users-gear"></i> Staff & Logs
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <span>Service: <b style="color: #10b981;">ORCL DB</b></span>
+            </div>
+        </aside>
+
+        <main class="content-body">
+
+            <div class="slideshow-container">
+                <div class="mySlides fade">
+                    <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=1200&auto=format&fit=crop"
+                        class="slide-img">
+                    <div class="slide-caption">
+                        <h3>Luxury Fleet Collection 2026</h3>
+                        <p>បទពិសោធន៍បើកបរដ៏ល្អឥតខ្ចោះជាមួយរថយន្តទំនើបៗទើបនឹងចូលស្តុកចុងក្រោយបង្អស់។</p>
+                    </div>
+                </div>
+                <div class="mySlides fade" style="display:none;">
+                    <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop"
+                        class="slide-img">
+                    <div class="slide-caption">
+                        <h3>Premium Sport Vehicles</h3>
+                        <p>ការធ្វើដំណើរប្រកបដោយទំនុកចិត្ត និងភាពស៊ីវិល័យខ្ពស់គ្រប់ច្រកល្ហក។</p>
+                    </div>
+                </div>
+                <a class="prev-slide" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next-slide" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+
+            <div class="content-header">
+                <div>
+                    <h2>Vehicles Fleet Management</h2>
+                    <p class="sub-title">Manage and filter your vehicle inventory easily</p>
+                </div>
+                <button class="btn-add-vehicle" id="btnOpenCreateModal">
+                    <i class="fa-solid fa-plus"></i> បញ្ចូលរថយន្តថ្មី
+                </button>
+            </div>
+
+            <div class="filter-tab-bar">
+                <button class="filter-btn active" id="filter-All" onclick="filterStatus('All')"><i
+                        class="fa-solid fa-border-all"></i> ទាំងអស់ (All)</button>
+                <button class="filter-btn" id="filter-Available" onclick="filterStatus('Available')"><i
+                        class="fa-solid fa-circle-check"></i> ឡានទំនេរ (Available)</button>
+                <button class="filter-btn" id="filter-Rented" onclick="filterStatus('Rented')"><i
+                        class="fa-solid fa-key"></i> កំពុងជួល (Rented)</button>
+                <button class="filter-btn" id="filter-Maintenance" onclick="filterStatus('Maintenance')"><i
+                        class="fa-solid fa-screwdriver-wrench"></i> ជួសជុល (Maintenance)</button>
+            </div>
+
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="vehicleSearch" placeholder="ស្វែងរកតាមម៉ាក ម៉ូដែល ប្រភេទ ឬ ផ្លាកលេខ...">
+            </div>
+
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>VEHICLE ID</th>
+                            <th>រូបភាព</th>
+                            <th>ម៉ាក & ម៉ូដែល</th>
+                            <th>ស្លាកលេខ</th>
+                            <th>ពណ៌ឡាន</th>
+                            <th>ប្រភេទ (TYPE NAME)</th>
+                            <th>តម្លៃ/ថ្ងៃ</th>
+                            <th>ស្ថានភាព</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vehicles-table-body">
+                        <tr>
+                            <td colspan="8" class="text-center">កំពុងទាញទិន្នន័យ...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div id="vehicleDetailModal" class="modal-fixed-overlay">
+        <div class="modal-fixed-content">
+            <span class="close-x-btn" onclick="closeModal('vehicleDetailModal')">&times;</span>
+            <h3 class="modal-title"><i class="fa-solid fa-circle-info icon-blue"></i> ព័ត៌មានលម្អិតរថយន្ត</h3>
+            <div class="image-preview-box">
+                <img id="modalVehicleImage" src="" alt="Vehicle Image" style="display:none;">
+                <div id="noImageText"><i class="fa-solid fa-car icon-placeholder"></i><br>គ្មានរូបភាពឡានទេ</div>
+            </div>
+            <div class="info-details-grid">
+                <div><span class="label-text">ID រថយន្ត:</span> <span id="modalVehicleId" class="font-bold"></span>
+                </div>
+                <div><span class="label-text">ប្រភេទឡាន:</span> <span id="modalTypeName"
+                        style="color:#7c3aed; font-weight:600;"></span></div>
+                <div class="full-width"><span class="label-text">ម៉ាក & ម៉ូដែល:</span> <span id="modalBrandModel"
+                        class="brand-text"></span></div>
+                <div><span class="label-text">ស្លាកលេខ:</span> <span id="modalPlateNo" class="plate-badge-style"></span>
+                </div>
+                <div><span class="label-text">ពណ៌ឡាន:</span> <span id="modalColor" class="color-badge-style"></span>
+                </div>
+                <div><span class="label-text">តម្លៃជួល/ថ្ងៃ:</span> <span id="modalDailyRate"
+                        style="font-weight:700; color:#10b981;"></span></div>
+                <div><span class="label-text">ស្ថានភាព:</span> <span id="modalStatus"></span></div>
+            </div>
+            <div class="modal-footer-actions">
+                <button id="btnEditVehicle" class="btn-edit"><i class="fa-solid fa-pen-to-square"></i> កែប្រែ
+                    (Edit)</button>
+                <button id="btnDeleteVehicle" class="btn-delete"><i class="fa-solid fa-trash-can"></i> លុប
+                    (Delete)</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="vehicleFormModal" class="modal-fixed-overlay">
+        <div class="modal-fixed-content" style="width: 500px;">
+            <span class="close-x-btn" onclick="closeModal('vehicleFormModal')">&times;</span>
+            <h3 class="modal-title" id="formModalTitle">បញ្ចូលរថយន្តថ្មី</h3>
+            <form id="vehicleForm" onsubmit="saveVehicle(event)">
+                <input type="hidden" id="formVehicleId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>ផ្លាកលេខ (PLATE NO) *</label>
+                        <input type="text" id="formPlateNo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>ពណ៌ឡាន (COLOR) *</label>
+                        <input type="text" id="formColor" required>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>ម៉ាក និង ម៉ូដែល *</label>
+                        <input type="text" id="formBrandModel" required>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>ប្រភេទឡាន (VEHICLE TYPE) *</label>
+                        <select id="formTypeId" required>
+                            <option value="">-- កំពុងទាញទិន្នន័យប្រភេទឡាន... --</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>ស្ថានភាពឡាន</label>
+                        <select id="formStatus">
+                            <option value="Available">Available</option>
+                            <option value="Rented">Rented</option>
+                            <option value="Maintenance">Maintenance</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>រូបភាពឡាន</label>
+                        <input type="file" id="formImageFile" accept="image/*" onchange="previewImage(this)">
+                        <input type="hidden" id="formImageBase64">
+                        <img id="formImgPreview" src=""
+                            style="max-height: 90px; display: none; margin: 10px auto 0 auto; border-radius:6px;">
+                    </div>
+                </div>
+                <div class="modal-footer-actions" style="margin-top: 20px;">
+                    <button type="button" class="filter-btn" onclick="closeModal('vehicleFormModal')">បោះបង់</button>
+                    <button type="submit" class="btn-add-vehicle" style="background:#10b981;"><i
+                            class="fa-solid fa-floppy-disk"></i> រក្សាទុក</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="vehicles.js"></script>
+</body>
+
+</html>

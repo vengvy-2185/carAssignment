@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VehicleRental DB - Customers</title>
+    <link rel="stylesheet" href="customers.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <header class="top-navbar">
+        <div class="logo-area">
+            <span class="logo-text">🛒 VehicleRental DB</span>
+        </div>
+        <div class="user-area">
+            <div class="user-avatar">U</div>
+            <button class="btn-logout">Logout</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <a href="index.html" class="menu-item">
+                    <i class="fa-solid fa-chart-simple"></i> Dashboard
+                </a>
+
+                <p class="menu-category">RENTALS & SALES</p>
+                <a href="customers.html" class="menu-item active">
+                    <i class="fa-solid fa-users"></i> Clients (Customers)
+                </a>
+                <a href="vehicles.html" class="menu-item">
+                    <i class="fa-solid fa-car"></i> Vehicles Fleet
+                </a>
+                <a href="orders.html" class="menu-item">
+                    <i class="fa-solid fa-calendar-days"></i> Rental Orders
+                </a>
+                <a href="invoices.html" class="menu-item">
+                    <i class="fa-solid fa-file-invoice"></i> Invoices (Views)
+                </a>
+
+                <p class="menu-category">OPERATIONS</p>
+                <a href="returns.html" class="menu-item">
+                    <i class="fa-solid fa-rotate-left"></i> Returns & Extra Charges
+                </a>
+                <a href="blacklist.html" class="menu-item">
+                    <i class="fa-solid fa-user-slash"></i> Blacklist Records
+                </a>
+                <a href="staff.html" class="menu-item">
+                    <i class="fa-solid fa-users-gear"></i> Staff & Logs
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <span>Service: <b style="color: #10b981;">ORCL DB</b></span>
+            </div>
+        </aside>
+
+        <main class="content-body">
+
+            <div class="content-header-top">
+                <div>
+                    <h2><i class="fa-solid fa-users-gear" style="color: #4f46e5;"></i> គ្រប់គ្រងព័ត៌មានអតិថិជន</h2>
+                    <p>Live analytics & client records management from Oracle SQL</p>
+                </div>
+                <button class="btn-add" id="openModalBtn">
+                    <i class="fa-solid fa-plus"></i> បញ្ចូលអតិថិជនថ្មី
+                </button>
+            </div>
+
+            <div class="marquee-container">
+                <div class="marquee-text">
+                    📢 <b>ប្រព័ន្ធគ្រប់គ្រងទិន្នន័យជួលរថយន្ត VehicleRental DB:</b>
+                    រាល់ទិន្នន័យទាំងអស់ត្រូវបានរក្សាទុកដោយសុវត្ថិភាពនៅក្នុង Oracle Database។ ប្រសិនបើមានបញ្ហាតភ្ជាប់
+                    សូមពិនិត្យមើល Service ORCL ឡើងវិញ!
+                </div>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="stat-card total-clients">
+                    <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-label">អតិថិជនសរុប</span>
+                        <h3 id="total-customers-count">0 នាក់</h3>
+                    </div>
+                </div>
+                <div class="stat-card active-rentals">
+                    <div class="stat-icon"><i class="fa-solid fa-car-side"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-label">កំពុងជួលសកម្ម</span>
+                        <h3>-- នាក់</h3>
+                    </div>
+                </div>
+                <div class="stat-card blacklist-records">
+                    <div class="stat-icon"><i class="fa-solid fa-user-xmark"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-label">បញ្ជីខ្មៅ (Blacklist)</span>
+                        <h3 style="color: #ef4444;">-- នាក់</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="search-container" style="margin-bottom: 20px;">
+                <div style="position: relative; max-width: 350px;">
+                    <i class="fa-solid fa-magnifying-glass"
+                        style="position: absolute; left: 12px; top: 12px; color: #94a3b8;"></i>
+                    <input type="text" id="searchInput" placeholder="ស្វែងរកតាមឈ្មោះ ឬ លេខទូរស័ព្ទ..."
+                        style="width: 100%; padding: 10px 10px 10px 38px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                </div>
+            </div>
+
+            <div id="customerModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn" id="closeModalBtn">&times;</span>
+                    <h3 id="modalTitle"><i class="fa-solid fa-user-plus"></i> បញ្ចូលព័ត៌មានអតិថិជនថ្មី</h3>
+                    <form id="addCustomerForm">
+                        <input type="hidden" id="customerIdHidden">
+                        <div class="form-group">
+                            <label>ឈ្មោះពេញ (Full Name):</label>
+                            <input type="text" id="fullName" required placeholder="ឧ. កែវ សុភ័ក្ត្រ">
+                        </div>
+                        <div class="form-group">
+                            <label>លេខទូរស័ព្ទ (Phone):</label>
+                            <input type="text" id="phone" required placeholder="ឧ. 012345678">
+                        </div>
+                        <div class="form-group">
+                            <label>អាសយដ្ឋាន (Address):</label>
+                            <input type="text" id="address" placeholder="ឧ. ភ្នំពេញ">
+                        </div>
+                        <div class="form-group">
+                            <label>អត្តសញ្ញាណប័ណ្ណ / លិខិតឆ្លងដែន:</label>
+                            <input type="text" id="idCard" required placeholder="ឧ. 123456789">
+                        </div>
+                        <button type="submit" class="btn-submit" id="submitBtn">រក្សាទុកទិន្នន័យ</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>រូបថត</th>
+                            <th>ឈ្មោះពេញ</th>
+                            <th>លេខទូរស័ព្ទ</th>
+                            <th>អាសយដ្ឋាន</th>
+                            <th>អត្តសញ្ញាណប័ណ្ណ</th>
+                            <th>កាលបរិច្ឆេទចុះឈ្មោះ</th>
+                            <th>សកម្មភាព</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customers-table-body">
+                        <tr>
+                            <td colspan="8" class="text-center">កំពុងទាញទិន្នន័យពី Oracle Database...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="customers.js"></script>
+</body>
+
+</html>
