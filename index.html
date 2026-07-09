@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="km">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commercial Sales - Vehicle Rental Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <header class="top-navbar">
+        <div class="logo-area">
+            <span class="logo-text">🛒 VehicleRental DB</span>
+        </div>
+        <div class="user-area">
+            <div class="user-avatar">U</div>
+            <button class="btn-logout">Logout</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <aside class="sidebar">
+            <nav class="sidebar-menu">
+                <!-- ផ្នែក Dashboard -->
+                <a href="index.html" class="menu-item active">
+                    <i class="fa-solid fa-chart-simple"></i> Dashboard <!-- python -m uvicorn main:app --reload -->
+                </a>
+
+                <p class="menu-category">RENTALS & SALES</p>
+                <a href="customers.html" class="menu-item ">
+                    <i class="fa-solid fa-users"></i> Clients (Customers)
+                </a>
+                <a href="vehicles.html" class="menu-item">
+                    <i class="fa-solid fa-car"></i> Vehicles Fleet
+                </a>
+                <a href="orders.html" class="menu-item">
+                    <i class="fa-solid fa-calendar-days"></i> Rental Orders
+                </a>
+                <a href="invoices.html" class="menu-item">
+                    <i class="fa-solid fa-file-invoice"></i> Invoices (Views)
+                </a>
+
+                <p class="menu-category">OPERATIONS</p>
+                <a href="returns.html" class="menu-item">
+                    <i class="fa-solid fa-rotate-left"></i> Returns & Extra Charges
+                </a>
+                <a href="blacklist.html" class="menu-item">
+                    <i class="fa-solid fa-user-slash"></i> Blacklist Records
+                </a>
+                <a href="staff.html" class="menu-item">
+                    <i class="fa-solid fa-users-gear"></i> Staff & Logs
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <span>Service: <b style="color: #10b981;">ORCL DB</b></span>
+            </div>
+        </aside>
+        <main class="workspace">
+
+            <div class="workspace-header">
+                <div>
+                    <h2 class="page-title">Dashboard</h2>
+                    <p class="page-subtitle">Live analytics & key metrics from Oracle SQL</p>
+                </div>
+                <div class="time-filters">
+                    <button class="filter-btn active">Day</button>
+                    <button class="filter-btn">Week</button>
+                    <button class="filter-btn">Month</button>
+                    <button class="filter-btn">Year</button>
+                </div>
+            </div>
+
+            <div class="metrics-grid">
+
+                <div class="card card-purple">
+                    <p class="card-title">Total Rental Orders</p>
+                    <h3 id="metric-rentals" class="card-value">0</h3>
+                    <p class="card-desc">⏱️ Active & completed records</p>
+                    <span class="card-icon">📦</span>
+                </div>
+
+                <div class="card card-indigo">
+                    <p class="card-title">Revenue</p>
+                    <h3 id="metric-revenue" class="card-value">$0.00</h3>
+                    <p class="card-desc">📈 Calculated from views</p>
+                    <span class="card-icon">💰</span>
+                </div>
+
+                <div class="card card-emerald">
+                    <p class="card-title">Total Income Records</p>
+                    <h3 id="metric-income" class="card-value">$0.00</h3>
+                    <p class="card-desc">🟢 All income records</p>
+                    <span class="card-icon">💵</span>
+                </div>
+
+                <div class="card card-blue">
+                    <p class="card-title">Available Vehicles</p>
+                    <h3 id="metric-available-cars" class="card-value">0</h3>
+                    <p class="card-desc">🚗 Ready for new clients</p>
+                    <span class="card-icon">🚘</span>
+                </div>
+
+                <div class="card card-cyan">
+                    <p class="card-title">Rented Vehicles</p>
+                    <h3 id="metric-rented-cars" class="card-value">0</h3>
+                    <p class="card-desc">🔑 Vehicles on the road</p>
+                    <span class="card-icon">🏢</span>
+                </div>
+
+                <div class="card card-violet">
+                    <p class="card-title">Blacklist Clients</p>
+                    <h3 id="metric-blacklist" class="card-value">0</h3>
+                    <p class="card-desc">⚠️ Pending/Restricted customers</p>
+                    <span class="card-icon">🚫</span>
+                </div>
+
+                <div class="card card-sky">
+                    <p class="card-title">Total Clients</p>
+                    <h3 id="metric-customers" class="card-value">0</h3>
+                    <p class="card-desc">👥 Registered in system</p>
+                    <span class="card-icon">👥</span>
+                </div>
+
+                <div class="card card-dark-cyan">
+                    <p class="card-title">Vehicle Categories</p>
+                    <h3 class="card-value">4</h3>
+                    <p class="card-desc">📦 SUV, Sedan, Pickup, Van</p>
+                    <span class="card-icon">📦</span>
+                </div>
+
+                <div class="card card-pink">
+                    <p class="card-title">Future Bookings</p>
+                    <h3 class="card-value">0%</h3>
+                    <p class="card-desc">🛒 Pre-booked rate</p>
+                    <span class="card-icon">🛒</span>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h4 class="chart-title">📈 Revenue Over Time</h4>
+                        <span id="chart-badge-time" class="chart-badge">Day</span>
+                    </div>
+                    <!-- ដូរ Placeholder ចាស់ ចេញ ជំនួសដោយ Canvas -->
+                    <div style="position: relative; height:200px; width:100%;">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <h4 class="chart-title">🧩 Orders by Status</h4>
+                    <div style="position: relative; height:200px; width:100%; display: flex; justify-content: center;">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
